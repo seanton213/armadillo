@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
-import { getNasaMarsRoverUrl } from './api';
-import { getCurrentDate } from '../utils/dateUtil';
+import { getMarsRoverData } from './api';
 import MarsPhoto from '../components/MarsPhoto';
 import styled from 'styled-components';
+import Search from './Search';
+
+const MOST_RECENT_PHOTO_DATE = "2021-01-06";
 
 const StyledUl = styled.ul`
   list-style-type: none;
@@ -31,40 +33,32 @@ function Content() {
     // this useEffect will run once
     // similar to componentDidMount()
     useEffect(() => {
-      fetch(getNasaMarsRoverUrl(getCurrentDate()))
-        .then(res => res.json())
-        .then(
-          (result) => {
-            setIsLoaded(true);
-
-            if (result.photos && result.photos.length > 0) {
-              setPhotos(result.photos);
-            } else {
-              setError({ message: "No photos were loaded for the given date: " + getCurrentDate() });
-            }
-          },
-          (error) => {
-            setIsLoaded(true);
-            setError(error);
-          }
-        )
+      getMarsRoverData(MOST_RECENT_PHOTO_DATE, setError, setIsLoaded, setPhotos);
     }, [])
-  
+
     if (error) {
-      return <h5>Error: {error.message}</h5>;
+      return (
+        <div>
+          <Search setError={setError} setIsLoaded={setIsLoaded} setPhotos={setPhotos} />
+          <h5>Error: {error.message}</h5>
+        </div>
+      );
     } else if (!isLoaded) {
       return <h5>Loading Photos...</h5>;
     } else {
       return (
-        <StyledUl>
-          {photos.map(photo => (
-            <ListItemContainer>
-              <StyledLi key={photo.id}>
-                <MarsPhoto date={photo.earth_date} img={photo.img_src} />
-              </StyledLi>
-            </ListItemContainer>
-          ))}
-        </StyledUl>
+        <div>
+          <Search setError={setError} setIsLoaded={setIsLoaded} setPhotos={setPhotos} />
+          <StyledUl>
+            {photos.map(photo => (
+                <StyledLi key={photo.id}>
+                  <ListItemContainer>
+                    <MarsPhoto date={photo.earth_date} img={photo.img_src} />
+                  </ListItemContainer>
+                </StyledLi>
+            ))}
+          </StyledUl>
+        </div>
       );
     }
 }

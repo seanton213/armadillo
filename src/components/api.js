@@ -20,4 +20,27 @@ function getNasaMarsRoverUrl(date) {
     return NASA_MARS_ROVER_BASE_URL + "?earth_date=" + date + "&api_key=" + apiKey;
 }
 
-export { getNasaMarsRoverUrl };
+function getMarsRoverData(date, setError, setIsLoaded, setPhotos) {
+    setError(null);
+    setIsLoaded(false);
+    setPhotos([]);
+    return fetch(getNasaMarsRoverUrl(date))
+        .then(res => res.json())
+        .then(
+            (result) => {
+                setIsLoaded(true);
+
+                if (result.photos && result.photos.length > 0) {
+                    setPhotos(result.photos);
+                } else {
+                    setError({ message: "No photos were loaded for the given date: " + date });
+                }
+            },
+            (error) => {
+                setIsLoaded(true);
+                setError(error);
+            }
+    );
+}
+
+export { getMarsRoverData };
