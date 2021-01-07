@@ -6,8 +6,10 @@ import styled from 'styled-components';
 
 const StyledUl = styled.ul`
   list-style-type: none;
-  margin: 0;
+  margin: 0 auto;
   padding: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
 `;
 
 const ListItemContainer = styled.div`
@@ -38,7 +40,7 @@ function Content() {
             if (result.photos && result.photos.length > 0) {
               setPhotos(result.photos);
             } else {
-              setError({ message: "No photos were loaded for the given date" });
+              setError({ message: "No photos were loaded for the given date: " + getCurrentDate() });
             }
           },
           (error) => {
