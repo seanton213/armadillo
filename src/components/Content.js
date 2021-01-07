@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { getNasaMarsRoverUrl } from './api';
 import { getCurrentDate } from '../utils/dateUtil';
+import MarsPhoto from '../components/MarsPhoto';
 
 function Content() {
     const [error, setError] = useState(null);
@@ -32,6 +33,11 @@ function Content() {
     } else {
       return (
         <ul>
+          {photos.map(photo => (
+            <li key={photo.id}>
+              <MarsPhoto date={photo.earth_date} img={photo.img_src} />
+            </li>
+          ))}
         </ul>
       );
     }
