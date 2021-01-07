@@ -2,6 +2,23 @@ import { useState, useEffect } from 'react';
 import { getNasaMarsRoverUrl } from './api';
 import { getCurrentDate } from '../utils/dateUtil';
 import MarsPhoto from '../components/MarsPhoto';
+import styled from 'styled-components';
+
+const StyledUl = styled.ul`
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+`;
+
+const ListItemContainer = styled.div`
+  border: black;
+  border-style: solid;
+  margin: 20px;
+`;
+
+const StyledLi = styled.li`
+  padding: 20px;
+`;
 
 function Content() {
     const [error, setError] = useState(null);
@@ -17,7 +34,12 @@ function Content() {
         .then(
           (result) => {
             setIsLoaded(true);
-            setPhotos(result.photos);
+
+            if (result.photos && result.photos.length > 0) {
+              setPhotos(result.photos);
+            } else {
+              setError({ message: "No photos were loaded for the given date" });
+            }
           },
           (error) => {
             setIsLoaded(true);
@@ -27,18 +49,20 @@ function Content() {
     }, [])
   
     if (error) {
-      return <div>Error: {error.message}</div>;
+      return <h5>Error: {error.message}</h5>;
     } else if (!isLoaded) {
-      return <div>Loading Photos...</div>;
+      return <h5>Loading Photos...</h5>;
     } else {
       return (
-        <ul>
+        <StyledUl>
           {photos.map(photo => (
-            <li key={photo.id}>
-              <MarsPhoto date={photo.earth_date} img={photo.img_src} />
-            </li>
+            <ListItemContainer>
+              <StyledLi key={photo.id}>
+                <MarsPhoto date={photo.earth_date} img={photo.img_src} />
+              </StyledLi>
+            </ListItemContainer>
           ))}
-        </ul>
+        </StyledUl>
       );
     }
 }

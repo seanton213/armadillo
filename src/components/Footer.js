@@ -5,6 +5,8 @@ const FooterDiv = styled.div`
   display: flex;
   width: 100%;
   justify-content: center;
+  position: relative;
+  bottom: 0;
 `;
 
 function Footer() {

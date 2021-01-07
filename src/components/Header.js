@@ -15,9 +15,7 @@ const Title = styled.h1`
 function Header() {
     return(
         <HeaderComponent>
-            <Title>
-                Mars Rover Photos
-            </Title>
+            <Title>Mars Rover Photos</Title>
         </HeaderComponent>
     );
 }
