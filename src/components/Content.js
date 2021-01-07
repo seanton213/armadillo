@@ -36,31 +36,25 @@ function Content() {
       getMarsRoverData(MOST_RECENT_PHOTO_DATE, setError, setIsLoaded, setPhotos);
     }, [])
 
-    if (error) {
-      return (
-        <div>
-          <Search setError={setError} setIsLoaded={setIsLoaded} setPhotos={setPhotos} />
-          <h5>Error: {error.message}</h5>
-        </div>
-      );
-    } else if (!isLoaded) {
-      return <h5>Loading Photos...</h5>;
-    } else {
-      return (
-        <div>
-          <Search setError={setError} setIsLoaded={setIsLoaded} setPhotos={setPhotos} />
-          <StyledUl>
-            {photos.map(photo => (
-                <StyledLi key={photo.id}>
-                  <ListItemContainer>
-                    <MarsPhoto date={photo.earth_date} img={photo.img_src} />
-                  </ListItemContainer>
-                </StyledLi>
-            ))}
-          </StyledUl>
-        </div>
-      );
-    }
+    return (
+      <div>
+        <Search setError={setError} setIsLoaded={setIsLoaded} setPhotos={setPhotos} />
+        {error ? <h5>Error: {error.message}</h5> 
+          : !isLoaded ? <h5>Loading Photos...</h5> 
+          : (
+            <StyledUl>
+              {photos.map(photo => (
+                  <StyledLi key={photo.id}>
+                    <ListItemContainer>
+                      <MarsPhoto date={photo.earth_date} img={photo.img_src} />
+                    </ListItemContainer>
+                  </StyledLi>
+              ))}
+            </StyledUl>
+          )
+        }
+      </div>
+    );
 }
 
 export default Content;
